@@ -1,0 +1,25 @@
+# 编译产物
+target/
+*.class
+
+# 日志
+logs/
+*.log
+
+# IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 本地配置（如果有）
+application-local.properties

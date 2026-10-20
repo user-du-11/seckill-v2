@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+    <!--日志存放路径-->
+    <property name="LOG_HOME" value="./logs" />
+
+    <!--控制台输出-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--日志编码器-->
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-ddHH:mm:ss.SSS}
+                [%thread] %-5level%logger{50}
+                - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--业务日志文件-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--指定写入日志文件-->
+        <file>${LOG_HOME}/seckill.log</file>
+        <!--指定基于时间的回滚策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义归档日志文件名格式-->
+            <fileNamePattern>${LOG_HOME}/seckill.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--定义归档日志时间-->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-ddHH:mm:ss.SSS}
+                [%thread] %-5level%logger{50}
+                - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--错误日志单独文件-->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/error.log</file>
+        <!--添加级别过滤器-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤器匹配级别-->
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-ddHH:mm:ss.SSS}
+                [%thread] %-5level%logger{50}
+                - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--异步写入日志-->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!--异步写入路径-->
+        <appender-ref ref="FILE"/>
+        <!--异步日志队列大小-->
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+    </appender>
+
+    <!--项目日志级别-->
+    <logger name="single.seckillv2" level="DEBUG"/>
+
+    <!--MyBatis SQL日志-->
+    <logger name="single.seckillv2.Mapper" level="DEBUG"/>
+
+    <!--根日志级别-->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+
+        <appender-ref ref="ASYNC_FILE"/>
+
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>
